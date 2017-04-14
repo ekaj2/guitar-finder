@@ -59,13 +59,16 @@ class Emailer:
 
     def login_to_server(self, server):
         try:
+            print("about to login")
             server.login(self.msg['From'], self.pw)
+            print("logged in")
         except smtplib.SMTPAuthenticationError:
             print("Invalid password!")
             exit()
 
     def send(self):
         # Send the message via local SMTP server.
+        print("Preparing to send...")
         with smtplib.SMTP('smtp.ipage.com') as server:
             self.login_to_server(server)
             server.sendmail(self.msg['From'], self.msg['To'], self.msg.as_string())
@@ -93,15 +96,18 @@ class Emailer:
             lines = f.readlines()
             for line in lines:
                 if line.startswith("msg_from:"):
-                    msg_from = line[line.find("msg_from"):]
+                    msg_from = line[line.find("msg_from:") + 9:].replace("\n", "")
                 elif line.startswith("msg_to:"):
-                    msg_from = line[line.find("msg_to"):]
+                    msg_to = line[line.find("msg_to:") + 7:].replace("\n", "")
                 elif line.startswith("msg_pw:"):
-                    msg_from = line[line.find("msg_pw"):]
+                    msg_pw = line[line.find("msg_pw:") + 7:].replace("\n", "")
 
         # ensure we have the data
         if any((msg_from, msg_pw, msg_to)) is None:
             print("INVALID FILE!!!")
+        print("msg_from:'{}'".format(msg_from))
+        print("msg_to:'{}'".format(msg_to))
+        print("pw:'{}'".format(msg_pw))
         return msg_from, msg_to, msg_pw
 
 

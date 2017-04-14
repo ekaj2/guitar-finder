@@ -3,7 +3,6 @@
 from urllib.request import urlopen
 from html.parser import HTMLParser
 import pickle
-from time import sleep
 
 from emailer import Emailer
 
@@ -16,9 +15,11 @@ except ImportError:
 
 class GuitarCenterParser(HTMLParser):
 
-    def __init__(self, keyword, results={}):
+    def __init__(self, keyword, results=None):
         super().__init__()
 
+        if results is None:
+            results = {}
         self.divs = 0
         self.found_guitar = False
         self.keyword = keyword
@@ -122,24 +123,21 @@ def main():
 
     # search - the search URL, and the keyword to look for
     search = "http://www.guitarcenter.com/Used/?Ntt=taylor%20314ce&Ns=r"
-    while True:
-        response = urlopen(search)
-        data = response.read().decode('utf-8')
+    response = urlopen(search)
+    data = response.read().decode('utf-8')
 
-        try:
-            gcp = GuitarCenterParser("314CE", pickle.load(open("314CE_GuitarCenter", "rb")))
-        except FileNotFoundError:
-            gcp = GuitarCenterParser("314CE")
-        gcp.feed(data)
+    try:
+        gcp = GuitarCenterParser("314CE", pickle.load(open("314CE_GuitarCenter", "rb")))
+    except FileNotFoundError:
+        gcp = GuitarCenterParser("314CE")
+    gcp.feed(data)
 
-        results = gcp.get_results()
-        print(results)
-        pickle.dump(results, open("314CE_GuitarCenter", "wb"))
+    results = gcp.get_results()
+    print(results)
+    pickle.dump(results, open("314CE_GuitarCenter", "wb"))
 
-        if PLOTTABLE:
-            plt_disp(results)
-
-        sleep(1200)  # check every 1/2 hour...
+    if PLOTTABLE:
+        plt_disp(results)
 
 if __name__ == '__main__':
     main()

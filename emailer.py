@@ -6,14 +6,13 @@ from getpass import getpass
 
 
 class Emailer:
-    """Complete class for sending an email with HTML and plain text to a list of subscribers.
+    """Complete class for sending an email with HTML and plain text.
 
     Methods:
         __init__: Initializes self.msg, self.recipients, then sends the email.
         load_text: Attaches the text part of the email after reading from a specified file.
         load_html: Attaches the HTML part of the email after reading from a specified file.
         login_to_server: Attempts to login to the SMTP server with email and password.
-        send: Sends the email to the recipients in the subscription list.
     """
 
     def __init__(self, text, html, newsletter=None):
@@ -59,19 +58,16 @@ class Emailer:
 
     def login_to_server(self, server):
         try:
-            print("about to login")
             server.ehlo()
             server.starttls()
             server.ehlo()
             server.login(self.msg['From'], self.pw)
-            print("logged in")
         except smtplib.SMTPAuthenticationError:
             print("Invalid password!")
             exit()
 
     def send(self):
         # Send the message via local SMTP server.
-        print("Preparing to send...")
         with smtplib.SMTP('smtp.gmail.com') as server:
             self.login_to_server(server)
             server.sendmail(self.msg['From'], self.msg['To'], self.msg.as_string())

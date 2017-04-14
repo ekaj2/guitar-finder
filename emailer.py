@@ -60,6 +60,9 @@ class Emailer:
     def login_to_server(self, server):
         try:
             print("about to login")
+            server.ehlo()
+            server.starttls()
+            server.ehlo()
             server.login(self.msg['From'], self.pw)
             print("logged in")
         except smtplib.SMTPAuthenticationError:
@@ -69,7 +72,7 @@ class Emailer:
     def send(self):
         # Send the message via local SMTP server.
         print("Preparing to send...")
-        with smtplib.SMTP('smtp.ipage.com') as server:
+        with smtplib.SMTP('smtp.gmail.com') as server:
             self.login_to_server(server)
             server.sendmail(self.msg['From'], self.msg['To'], self.msg.as_string())
             server.quit()

@@ -104,9 +104,6 @@ class Emailer:
         # ensure we have the data
         if any((msg_from, msg_pw, msg_to)) is None:
             print("INVALID FILE!!!")
-        print("msg_from:'{}'".format(msg_from))
-        print("msg_to:'{}'".format(msg_to))
-        print("pw:'{}'".format(msg_pw))
         return msg_from, msg_to, msg_pw
 
 

@@ -6,3 +6,10 @@ info.txt
 
 # data files
 *GuitarCenter*
+
+# used for emails
+*.html
+
+# backups
+*.old
+

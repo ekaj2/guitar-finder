@@ -3,6 +3,7 @@
 from urllib.request import urlopen
 from html.parser import HTMLParser
 import pickle
+from os import path
 
 from emailer import Emailer
 
@@ -126,15 +127,17 @@ def main():
     response = urlopen(search)
     data = response.read().decode('utf-8')
 
+    pth = path.join(path.dirname(path.abspath(__file__)), "314CE_GuitarCenter")
+
     try:
-        gcp = GuitarCenterParser("314CE", pickle.load(open("314CE_GuitarCenter", "rb")))
+        gcp = GuitarCenterParser("314CE", pickle.load(open(pth, "rb")))
     except FileNotFoundError:
         gcp = GuitarCenterParser("314CE")
     gcp.feed(data)
 
     results = gcp.get_results()
     print(results)
-    pickle.dump(results, open("314CE_GuitarCenter", "wb"))
+    pickle.dump(results, open(pth, "wb"))
 
     if PLOTTABLE:
         plt_disp(results)

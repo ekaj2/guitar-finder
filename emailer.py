@@ -1,7 +1,7 @@
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-import os.path
+from os import path
 from getpass import getpass
 
 
@@ -79,7 +79,9 @@ class Emailer:
         msg_to = None
         msg_pw = None
 
-        if not os.path.isfile("info.txt"):
+        pth = path.join(path.dirname(path.abspath(__file__)), "info.txt")
+
+        if not path.isfile(pth):
             # prompt user for info
             msg_from = input("From: ")
             msg_to = input("To: ")
@@ -87,11 +89,11 @@ class Emailer:
             msg_pw = getpass("From password: ")  # this is not protected...use a dummy email account
 
             # write info to file
-            with open("info.txt", 'w') as f:
+            with open(pth, 'w') as f:
                 print("msg_from:{f}\nmsg_to:{t}\nmsg_pw:{p}".format(f=msg_from, t=msg_to, p=msg_pw), file=f)
 
         # get data from file
-        with open("info.txt", 'r') as f:
+        with open(pth, 'r') as f:
             lines = f.readlines()
             for line in lines:
                 if line.startswith("msg_from:"):

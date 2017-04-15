@@ -1,0 +1,8 @@
+# the file that stores passwords and emails
+info.txt
+
+# all folders for now...
+*/
+
+# data files
+*GuitarCenter*

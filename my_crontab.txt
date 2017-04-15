@@ -1,0 +1,12 @@
+# this is the working crontab that I have ATM for the guitar searcher...
+
+# from Stack Overflow answer: https://askubuntu.com/a/50558
+# "Tell cron to run all commands in bash by setting the shell at the
+# top of your crontab"
+SHELL=/bin/bash
+
+# should check for new guitars every 30 minutes
+# sends output to the log file described at the end and 2>&1 means that the
+# standard error is sent to a file closeby
+*/30 * * * * /home/pi/guitar_search/cron_job.sh >> /tmp/my_cron.log
+

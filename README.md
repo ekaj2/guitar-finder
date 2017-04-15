@@ -13,7 +13,7 @@ This small script currently searches [Guitar Center's website](http://www.guitar
 
 ### Choosing a usable keyword
 
-This tool is not designed to work with large results or a variety of types, but rather to help you find the best deal on a particular model. Your keyword should be in the title of *every* result that you wish to process. Fortunately, you don't really have to worry this anymore...it is only used for the console output. It may be removed entirely at some point.
+This tool is not designed to work with large results or a variety of types, but rather to help you find the best deal on a particular model. Your keyword should be in the title of *every* result that you wish to process. Fortunately, you don't really have to worry about this anymore...it is only used for the console output. It may be removed entirely at some point.
 
 ### Email
 
@@ -24,4 +24,7 @@ I now have the project configured to handle a gmail account correctly. The call 
 * Supports a max of 200 search results (only uses first page)
 
 ### License
-* GPL 3
+* [GPL 3](https://www.gnu.org/licenses/gpl-3.0.en.html)
+* Copyright 2017 Jake Dube
+
+[View on Github Pages](https://ekaj2.github.io/guitar-finder/)

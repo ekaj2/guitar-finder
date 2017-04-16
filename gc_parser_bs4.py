@@ -1,6 +1,7 @@
 from urllib.request import urlopen
 from os import path
 import pickle
+import re
 
 from bs4 import BeautifulSoup
 
@@ -35,14 +36,14 @@ class GCParserBS4:
 
     def get_guitars_from_sections(self):
         for section in self.guitar_sections:
-            link = str(section.find("a", href=True).attrs["href"])  # TODO - add the necessary prefix
+            link = "http://www.guitarcenter.com" + str(section.find("a", href=True).attrs["href"])
             image = str(section.find("img", attrs={"data-original": True}).attrs["data-original"])
-            # TODO - fix the errors
-            #condition = str(section.find(string="Condition").string)  # TODO - remove the "condition" at the end
-            #price = str(section.find(string="lowPrice").string)  # TODO - remove the "lowPrice:" at the beginning
+            condition = str(section.find(name="div", string=re.compile("Condition")).string)[:-10]
+            price = str(section.find(string=re.compile("lowPrice:")))[15:]
             item_id = str(section.find("var", class_="hidden displayId").string)
-            print(link, image, item_id)
-            #self.guitars.append(Guitar(link, image, condition, price, item_id))
+
+            print(link, image, condition, price, item_id)
+            self.guitars.append(Guitar(link, image, condition, price, item_id))
 
     def get_results(self):
         return self.guitar_sections

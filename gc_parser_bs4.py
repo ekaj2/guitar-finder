@@ -48,7 +48,7 @@ class GCParserBS4:
             image = str(section.find("img", attrs={"data-original": True}).attrs["data-original"])
             condition = str(section.find("div", string=re.compile("Condition")).string)[:-10]
             price = str(section.find(string=re.compile("lowPrice:")))[15:]
-            item_id = str(section.find("var", class_="hidden displayId").string)
+            item_id = int(str(section.find("var", class_="hidden displayId").string))
 
             self.guitars.append(Guitar(link, image, condition, price, item_id))
 

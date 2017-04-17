@@ -14,39 +14,46 @@ except ImportError:
 
 class Guitar:
     def __init__(self, link, image, condition, price, item_id):
-        # TODO - fill in the following sections w/ bs4
-        self.link = link
-        self.image = image
-        self.condition = condition
-        self.price = price
-        self.item_id = item_id
+        self.link = link             # string - link
+        self.image = image           # string - link
+        self.condition = condition   # string
+        self.price = price           # string
+        self.item_id = item_id       # int
+
+    def __str__(self):
+        return "{}, {}, {}, {}, {}".format(self.link, self.image, self.condition, self.price, self.item_id)
+
+    def __eq__(self, other):
+        return self.item_id == other.item_id
+
+    def __ne__(self, other):
+        return self.item_id != other.item_id
+
+    def same_price(self, other):
+        return self.price == other.price
 
 
 class GCParserBS4:
     def __init__(self, data):
         self.soup = BeautifulSoup(data, "html.parser")
-        self.guitar_sections = []
         self.guitars = []
 
-        self.get_instrument_tag_section()
-        self.get_guitars_from_sections()
+        self.get_guitars()
 
-    def get_instrument_tag_section(self):
-        self.guitar_sections = self.soup.find_all("div", class_="product")
+    def get_guitars(self):
+        sections = self.soup.find_all("div", class_="product")
 
-    def get_guitars_from_sections(self):
-        for section in self.guitar_sections:
+        for section in sections:
             link = "http://www.guitarcenter.com" + str(section.find("a", href=True).attrs["href"])
             image = str(section.find("img", attrs={"data-original": True}).attrs["data-original"])
-            condition = str(section.find(name="div", string=re.compile("Condition")).string)[:-10]
+            condition = str(section.find("div", string=re.compile("Condition")).string)[:-10]
             price = str(section.find(string=re.compile("lowPrice:")))[15:]
             item_id = str(section.find("var", class_="hidden displayId").string)
 
-            print(link, image, condition, price, item_id)
             self.guitars.append(Guitar(link, image, condition, price, item_id))
 
     def get_results(self):
-        return self.guitar_sections
+        return self.guitars
 
 
 def main():
@@ -60,9 +67,8 @@ def main():
     gcp = GCParserBS4(data)
 
     results = gcp.get_results()
-    for r in results:
-        print("=" * 50)
-        print(r)
+    for guitar in results:
+        print(guitar)
     # pickle.dump(results, open(pth, "wb"))
     #
     # if PLOTTABLE:
